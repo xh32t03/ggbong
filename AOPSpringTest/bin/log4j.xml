@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">   
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+    <!-- ===================================================================== -->
+    <!--  以下是appender的定义                                                 -->
+    <!-- ===================================================================== -->
+    <!-- 控制台输出 ConsoleAppender -->
+    <appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+        <param name="threshold" value="debug"/>
+        <param name="ImmediateFlush" value="true"/>
+        <param name="Target" value="System.out"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%-d{yyyy-MM-dd HH:mm:ss,SSS} [%-5p] (%C{2},%L) - %m%n"/>
+        </layout>
+        <!--过滤器设置输出的级别-->  
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">  
+            <param name="levelMin" value="DEBUG" />  
+            <param name="levelMax" value="ERROR" />  
+            <param name="AcceptOnMatch" value="true" />  
+        </filter> 
+    </appender>
+	
+	<!-- 项目根日志 -->
+    <appender name="PROJECT" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="/logs/root.log"/>
+	    <param name="append" value="true"/>
+        <param name="threshold" value="debug"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS} [%-5p] (%C{2},%L) - %m%n"/>
+        </layout>
+    </appender>
+    <appender name="SERVER" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="/logs/server.log"/>
+	    <param name="append" value="true"/>
+        <param name="threshold" value="debug"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS} [%-5p] (%C{2},%L) - %m%n"/>
+        </layout>
+    </appender>
+    <appender name="SYS" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="/logs/sys.log"/>
+	    <param name="append" value="true"/>
+        <param name="threshold" value="error"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS} [%-5p] (%C{2},%L) - %m%n"/>
+        </layout>
+    </appender>
+	<appender name="MESSAGE" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="/logs/message.log"/>
+	    <param name="append" value="true"/>
+        <param name="threshold" value="debug"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS} [%-5p] (%C{2},%L) | %m%n"/>
+        </layout>
+    </appender>
+	<appender name="TASK" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="/logs/task.log"/>
+	    <param name="append" value="true"/>
+        <param name="threshold" value="info"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS} [%-5p] (%C{2},%L) - %m%n"/>
+        </layout>
+    </appender>
+    <appender name="PROXOOL" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="/logs/proxool.log"/>
+	    <param name="append" value="true"/>
+        <param name="threshold" value="debug"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{DATE} [%-5p] %c {%F:%L} - %m%n"/>
+        </layout>
+    </appender>
+    
+    <!-- ===================================================================== -->
+    <!--  以下是logger的定义                                                   -->
+    <!-- ===================================================================== -->
+    <logger name="org.springframework">  
+        <level value="WARN"/>  
+    </logger>
+    <logger name="com.ibatis" additivity="true">
+		<level value="DEBUG" />
+	</logger>
+    <logger name="java.sql">
+        <level value="ERROR"/>
+    </logger>
+    <logger name="javax.sql">
+        <level value="ERROR"/>
+    </logger>
+    
+    <!-- <logger name="jdbc.sqltiming">
+    	<level value="INFO"/>
+    </logger>
+ 	<logger name="jdbc.sqlonly">
+ 		<level value="INFO"/>
+ 	</logger> -->
+ 	
+ 	<!-- <logger name="java.sql.Connection" additivity="true">
+		<level value="DEBUG" />
+	</logger>
+	<logger name="java.sql.Statement" additivity="true">
+		<level value="DEBUG" />
+	</logger>
+	<logger name="java.sql.PreparedStatement" additivity="true">
+		<level value="DEBUG" />
+	</logger>
+	<logger name="java.sql.ResultSet" additivity="true">
+		<level value="DEBUG" />
+	</logger> -->
+ 	
+ 	<!-- proxool -->
+    <logger name="org.logicalcobwebs.proxool">
+        <level value="DEBUG"/>
+        <appender-ref ref="PROXOOL"/>
+    </logger>
+    
+    <!-- Alibaba Druid -->
+    <logger name="com.alibaba">
+    	<level value="ERROR"/>
+    </logger>
+	<logger name="druid.sql" additivity="true">
+		<level value="DEBUG"/>
+    </logger>
+	<logger name="druid.sql.DataSource">
+		<level value="WARN"/>
+    </logger>
+	<logger name="druid.sql.Connection">
+		<level value="WARN"/>
+    </logger>
+	<logger name="druid.sql.Statement" additivity="true">
+		<level value="DEBUG"/>
+    </logger>
+	<logger name="druid.sql.ResultSet" additivity="true">
+		<level value="DEBUG"/>
+    </logger>
+    
+    <logger name="SystemOut" additivity="false">
+		<level value="DEBUG" />
+		<appender-ref ref="STDOUT"/>
+	</logger>
+    
+    <logger name="com.autrade.spt" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="SERVER"/>
+    </logger>
+    
+    <logger name="SptServer.Sys" additivity="false">
+        <level value="ERROR"/>
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="SYS"/>
+    </logger>
+    <logger name="SptServer.Message" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="MESSAGE"/>
+    </logger>
+	<logger name="SptServer.Task" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="TASK"/>
+    </logger>
+      
+    <!-- ===================================================================== -->
+    <!--  Root logger的定义                                                    -->
+    <!-- ===================================================================== -->
+	<!-- 定义全局的日志输出级别,但是在输出目的地的配置中配置的具体输出级别优先级高于全局定义的优先级。 如果在PROJECT中定义<param 
+		name="Threshold" value="info"></param>，那么将会把info以上级别的信息输出 -->
+    <root>
+        <priority value="DEBUG"/>
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="PROJECT"/>
+    </root>
+</log4j:configuration>
