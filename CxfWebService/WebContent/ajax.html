@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Ajax调用RestWebService服务</title>
+<script type="text/javascript" src="public/js/jquery-1.7.1.js"></script>
+
+<script type="text/javascript">
+function createXMLHttpRequest() {//创建一个XMLHttpRequest对象 初始化、指定处理函数、发送请求的函数
+	//设一个变量
+	var xmlHttpReq = false;
+	//辨别浏览器的类型：对于Mozilla﹑Netscape﹑Safari等浏览器,创建XMLHttpRequest..
+	if (window.XMLHttpRequest) { // Mozilla, Safari,...
+		xmlHttpReq = new XMLHttpRequest();
+		if (xmlHttpReq.overrideMimeType) {
+			//如果服务器响应的header不是text/xml，可以调用其它方法修改该header 
+			xmlHttpReq.overrideMimeType("text/xml");
+		}
+	} else if(window.ActiveXObject){ // IE
+		var msxmls = ['Msxml2.XMLHTTP.5.0','Msxml2.XMLHTTP.4.0','Msxml2.XMLHTTP.3.0','Msxml2.XMLHTTP.2.0', 'Msxml2.XMLHTTP', 'Microsoft.XMLHTTP'];
+		for(var i in msxmls)
+		{
+			try {
+				xmlHttpReq = new ActiveXObject(msxmls[i]);
+				break;
+			}catch (e) {
+				throw new Error("Your browser does not support Ajax!");
+			}
+		}
+	}
+	if (!xmlHttpReq) {
+		throw new Error("initializing XMLHttpRequest Error!!!");
+		xmlHttpReq = false;
+	}
+	return xmlHttpReq;
+}
+
+function ajaxloadCallback() {
+	var xmlHttpReq = createXMLHttpRequest();
+	//var url="http://localhost:8080/RestWebService/service/restWS/rest?";
+	//var param="userName=mash5.event.add&password=DeleteFeed_Yunwei_Xunjian_Web_Listener&insert.responseName=YichengYunwei_XunjianRenwu";
+
+	var url="http://localhost:8080/CxfWebService/service/helloWorld/sayBye?name=liuxiaoling";
+	url="http://localhost:8080/CxfWebService/service/helloWorld/getlstUser";
+	//alert(encodeURI(encodeURI(url+param,"UTF-8"),"UTF-8"));
+	xmlHttpReq.open("get",encodeURI(encodeURI(url,"UTF-8"),"UTF-8"), true);
+	//服务器返回请求响应文本，如果是POST的方式则必须加上这一句..
+	xmlHttpReq.setRequestHeader("content-type","application/x-www-form-urlencoded");
+	xmlHttpReq.onreadystatechange = function(){//IE这里设置回调函数
+		if (xmlHttpReq.readyState == 4) {
+	    	if (xmlHttpReq.status == 200) {
+	            alert(xmlHttpReq.responseText);
+
+	            //alert(xmlHttpReq.responseText);
+				//alert(unescape(decodeURI(xmlHttpReq.responseText)));
+				document.getElementById("contentDiv").innerHTML="<font color='blue'>"+unescape(decodeURI(xmlHttpReq.responseText))+"</font>";
+	        } else {
+	            alert('There was a problem with the request.');
+	        }
+	    }
+	};  
+	xmlHttpReq.send(null);
+	
+}
+
+var btnExec = {
+	testCxfWebservice : function(){
+		var str = '{"head":{"op":"","session_id":"","method_id":"33"},"param":{"startStation":"上海","arriveStation":"南阳"}}';
+		//str = encodeURI(encodeURI(str,"UTF-8"),"UTF-8");
+		alert(encodeURI(encodeURI(str,"UTF-8"),"UTF-8"));
+		$.ajax({
+	            type: 'GET',
+				dataType : "json",
+	            url: encodeURI('http://localhost:8080/EtripRestWebService/service/restWS/rest'), //encodeURIComponent(str)
+	            contentType: 'application/json; charset=UTF-8',
+				data: 'data=' + str,
+	            success: function(data) {
+					//alert(data);
+					alert(JSON.stringify(data));
+					/*if(data.success_flag=="True"){
+						alert("获取信息成功!");
+					}else{
+						alert("获取信息失败!");
+					}*/
+	            },
+				error:function(XMLHttpRequest, textStatus, errorThrown){
+					alert("请求错误!");
+				}
+	        });
+	},
+	
+	testRestWebService : function(){
+		var url="http://localhost:8080/CxfWebService/service/restWS/rest?userName=joly&password=1";
+	    
+	    $.ajax({
+	            type: 'get',
+				dataType : "json",
+	            url: url,
+	            contentType: 'application/json',
+	            success: function(data) {
+	                alert(JSON.stringify(data));
+					$("#contentDiv").html("<font color='blue'>"+unescape(decodeURI(JSON.stringify(data)))+"</font>");
+	            },
+				error:function(XMLHttpRequest, textStatus, errorThrown){
+					alert("error: " + textStatus);
+				}
+		    });
+	}
+}
+</script>
+
+</head>
+<body style="text-align: center;width: 100%">
+	<div style="background-color: #ccc;text-align: center;width: 100%"><span>AjaxWebService</span></div>
+	<br/>
+	<div>
+		<input type="button" value="调用" onclick="btnExec.testRestWebService()" style="width: 118px">
+	</div>
+	<br/>
+	<div id="contentDiv" style="border:1px dashed #ccc;"></div>
+
+	<br/>
+	
+	<form
+		action="http://localhost:8080/mashWebServices/service/fileUpload/rest"
+		method="post" enctype="multipart/form-data" name="form1">
+		<input type="file" name="file"> <input type="submit" value="上传">
+	</form>
+	
+</body>
+</html>

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+	<soap:Body>
+		<ns2:getlstObjectResponse xmlns:ns2="http://service.cxf.com/">
+			<return xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">上海</return>
+			<return xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">北京</return>
+			<return xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">深圳</return>
+			<return xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">杭州</return>
+			<return xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">南京</return>
+		</ns2:getlstObjectResponse>
+	</soap:Body>
+</soap:Envelope>

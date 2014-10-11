@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xmlns:http-conf="http://cxf.apache.org/transports/http/configuration"
+       xsi:schemaLocation="
+             http://www.springframework.org/schema/beans
+             http://www.springframework.org/schema/beans/spring-beans.xsd
+             http://cxf.apache.org/jaxws
+             http://cxf.apache.org/schemas/jaxws.xsd
+             http://cxf.apache.org/jaxrs
+             http://cxf.apache.org/schemas/jaxrs.xsd
+             http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd">
+             
+	<!-- 针对CXF发布服务的需要的配置的加载的导入 -->
+	<import resource="classpath:META-INF/cxf/cxf-all.xml" />
+    
+	<!-- 设置服务相关的请求的配置 -->
+	<http-conf:conduit name="*.http-conduit">
+		<http-conf:client ReceiveTimeout="600000"
+			ConnectionTimeout="600000" /><!-- 10分钟 -->
+	</http-conf:conduit>
+
+	<!-- CxfWebservice -->
+	<jaxws:endpoint id="helloWorld" implementor="com.cxf.webservice.HelloWorldImpl" address="/helloWorld" />
+	
+	<!-- CxfRestWebservice START-->
+	<!-- 设置需要发布的bean -->
+	<bean id="RestWSBean" class="com.cxf.rest.webservice.RestWebService" />
+	<bean id="mash5" class="com.mash5.rest.Mash5Impl"></bean>
+	<!-- 发布相关的WebService -->
+	<jaxrs:server id="RestWS" address="/restWS">
+		<jaxrs:serviceBeans>
+			<ref bean="RestWSBean" />
+			<ref bean="mash5" />
+		</jaxrs:serviceBeans>
+		<jaxrs:extensionMappings>
+			<entry key="json" value="application/json" />
+			<entry key="xml" value="application/xml" />
+		</jaxrs:extensionMappings>
+		<jaxrs:providers>
+			<ref bean="jaxbProvider" />
+			<ref bean="jsonProvider" />
+		</jaxrs:providers>
+	</jaxrs:server>
+
+	<!-- WebService message handlers -->
+	<bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider" />
+	<bean id="jsonProvider" class="org.apache.cxf.jaxrs.provider.JSONProvider" />
+	<!-- CxfRestWebservice END-->
+	
+	<!-- RESTful -->
+	<bean id="loggingInInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor"></bean>
+	<bean id="loggingOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor"></bean>
+	
+	<bean id="studentImplBean" class="com.cxf.restful.demo2.service.impl.StudentServiceImpl" />
+	<bean id="userImplBean" class="com.cxf.restful.demo3.UserServiceRS" />
+    <jaxrs:server id="cxfServiceRs" address="/restful">
+		<jaxrs:serviceBeans>
+			<ref bean="studentImplBean" />
+			<ref bean="userImplBean" />
+		</jaxrs:serviceBeans>
+		<jaxrs:extensionMappings>
+			<entry key="json" value="application/json" />
+			<entry key="xml" value="application/xml" />
+		</jaxrs:extensionMappings>
+		<jaxrs:inInterceptors>
+			<ref bean="loggingInInterceptor" />
+		</jaxrs:inInterceptors>
+		<jaxrs:outInterceptors>
+			<ref bean="loggingOutInterceptor" />
+		</jaxrs:outInterceptors>
+	</jaxrs:server>
+
+	<!-- <bean id="client" class="com.cxf.service.IHelloWorld" factory-bean="clientFactory"
+		factory-method="create" />
+	<bean id="clientFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
+		<property name="serviceClass" value="com.cxf.service.IHelloWorld" />
+		<property name="address"
+			value="http://localhost:8080/CxfWebService/service/helloWorld" />
+	</bean> -->
+</beans>
