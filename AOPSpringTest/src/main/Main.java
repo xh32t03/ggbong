@@ -42,8 +42,6 @@ public class Main
 //        
 //        assertEquals(ctx.getBean("mysqlDataSourceBean"), testDao.getMysqlDataSource()); 
     
-        
-        
 //        int[] dataArr = {1, 9, 7, 0, 8, 3};
 //        
 //        int len = dataArr.length;
