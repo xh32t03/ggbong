@@ -11,15 +11,13 @@ import static org.junit.Assert.*;
 public class Main
 {
 
-    public static ApplicationContext ctx;
+//    public static ApplicationContext ctx;
 
     public static void test()
     {
         String[] a;
         String[] aa = {"1", "2", "4", "7"};
-        
         a = aa;
-        
         System.out.println(a[1]);
     }
     
